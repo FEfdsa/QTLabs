@@ -26,11 +26,6 @@ private:
     Ui::MainWindow *ui;
     void start_sys();
     void my_func();
-    void my_func1();
-    void my_func2();
-    void my_func3();
-    void if0();
-    void if1();
 };
 
 #endif // MAINWINDOW_H
