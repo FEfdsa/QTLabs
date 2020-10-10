@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+/*#include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -24,6 +24,7 @@ void MainWindow::on_pushButton_clear_clicked()
     ui->label_atk_value->clear();
     ui->label_def_value->clear();
     ui->label_class_value->clear();
+    ui->lineEdit_str->setVisible(true);
     points = 20;//максимум очков
     ui->lineEdit_Points->setText(QString::number(points));//преобразуем число в текст и записываем его в lineEdit
 }
@@ -33,8 +34,9 @@ void MainWindow::on_pushButton_create_clicked()
     QString name;//имя
     int leng;//длина имени
     bool flag;//признак успешности генерации
-    int str,agl,intel,luck;//параметры
+    int str,dex,intel,luck;//параметры
 
+    name.clear();
     name = ui->lineEdit_Name->text();
     leng = name.length();
     if ((leng < 3) ||(leng >20))
@@ -42,10 +44,10 @@ void MainWindow::on_pushButton_create_clicked()
         flag = false;
         QMessageBox::warning(this, "Ошибка", "Длина имени должа быть от 3 до 20 симоволов.");
     }
-        else
-        {
-            flag = true;
-        }
+    else
+    {
+        flag = true;
+    }
     if (flag)
     {
         if ((!ui->radioButton_Sex_M->isChecked())&&(!ui->radioButton_Sex_W->isChecked()))
@@ -53,11 +55,11 @@ void MainWindow::on_pushButton_create_clicked()
             flag = false;
             QMessageBox::warning(this, "Ошибка", "Пол не выбран.");
         }
-            else
-            {
-                flag = true;
-            }
+        else
+        {
+            flag = true;
         }
+    }
     if (flag) //сила
     {
         str = ui->lineEdit_str->text().toInt(&flag);
@@ -65,31 +67,31 @@ void MainWindow::on_pushButton_create_clicked()
         {
             QMessageBox::warning(this, "Ошибка", "Не верное значение параметра Сила.");
         }
-            else
+        else
+        {
+            if ((str <1)|| (str > 10))
             {
-                if ((str <=1)|| (str >= 10))
-                {
-                    flag = false;
-                    QMessageBox::warning(this, "Ошибка", "Cила должна быть от 1 до 10 включительно.");
-                }
+                flag = false;
+                QMessageBox::warning(this, "Ошибка", "Cила должна быть от 1 до 10 включительно.");
             }
+        }
     }
     //Самим релизнуть
     if (flag) //ловкость
     {
-        agl = ui->lineEdit_agl->text().toInt(&flag);
+        dex = ui->lineEdit_dex->text().toInt(&flag);
         if (!flag)
         {
             QMessageBox::warning(this, "Ошибка", "Не верное значение параметра Ловкость.");
         }
-            else
+        else
+        {
+            if ((dex <1)|| (dex > 10))
             {
-                if ((agl <=1)|| (agl >= 10))
-                {
-                    flag = false;
-                    QMessageBox::warning(this, "Ошибка", "Ловкость должна быть от 1 до 10 включительно.");
-                }
+                flag = false;
+                QMessageBox::warning(this, "Ошибка", "Ловкость должна быть от 1 до 10 включительно.");
             }
+        }
     }
     if (flag) //интеллект
     {
@@ -98,14 +100,14 @@ void MainWindow::on_pushButton_create_clicked()
         {
             QMessageBox::warning(this, "Ошибка", "Не верное значение параметра Интеллект.");
         }
-            else
+        else
+        {
+            if ((intel <1)|| (intel > 10))
             {
-                if ((intel <=1)|| (intel >= 10))
-                {
-                    flag = false;
-                    QMessageBox::warning(this, "Ошибка", "Интеллект должна быть от 1 до 10 включительно.");
-                }
+                flag = false;
+                QMessageBox::warning(this, "Ошибка", "Интеллект должна быть от 1 до 10 включительно.");
             }
+        }
     }
     if (flag) //удача
     {
@@ -114,19 +116,19 @@ void MainWindow::on_pushButton_create_clicked()
         {
             QMessageBox::warning(this, "Ошибка", "Не верное значение параметра Удача.");
         }
-            else
+        else
+        {
+            if ((dex <1)|| (dex > 10))
             {
-                if ((agl <=1)|| (agl >= 10))
-                {
-                    flag = false;
-                    QMessageBox::warning(this, "Ошибка", "Удача должна быть от 1 до 10 включительно.");
-                }
+                flag = false;
+                QMessageBox::warning(this, "Ошибка", "Удача должна быть от 1 до 10 включительно.");
             }
+        }
     }
 
     if (flag)// проверка суммы очков
     {
-        int sum= points - (str+agl+intel+luck);
+        int sum= points - (str+dex+intel+luck);
         ui->lineEdit_Points->setText(QString::number(sum));
         if (sum!=0)
         {
@@ -145,10 +147,10 @@ void MainWindow::on_pushButton_create_clicked()
     if (flag)// вывод результата
     {
         int hp,mp,atk,def;
-        hp = 8*str+2*agl;
-        mp = 8*intel+agl+luck;
-        atk = 6*str+2*agl+2*luck;
-        def = 7*agl+3*luck;
+        hp = 8*str+2*dex;
+        mp = 8*intel+dex+luck;
+        atk = 6*str+2*dex+2*luck;
+        def = 7*dex+3*luck;
 
 
         ui->label_hp_value->setNum(hp);
@@ -165,3 +167,80 @@ void MainWindow::on_pushButton_create_clicked()
         ui->label_class_value->clear();
     }
 }
+
+void MainWindow::on_pushButton_rand_clicked()
+{
+    QString name;//имя
+    int leng;//длина имени
+    bool flag, random;
+    random = false;
+    int str,dex,intel,luck;//параметры
+    str = 0; dex = 0; intel = 0; luck = 0;
+    srand(time(NULL));
+
+    name.clear();
+    name = ui->lineEdit_Name->text();
+    leng = name.length();
+    if ((leng < 3) ||(leng >20))
+    {
+        flag = false;
+        QMessageBox::warning(this, "Ошибка", "Длина имени должа быть от 3 до 20 симоволов.");
+    }
+    else
+    {
+        flag = true;
+        while (!random)
+        {
+        if (((str + dex + intel + luck) > points) || ((str + dex + intel + luck) < points))
+        {
+            str = rand() % 9 + 2;
+            dex = rand() % 9 + 2;
+            intel = rand() % 9 + 2;
+            luck = rand() % 9 + 2;
+            random = false;
+        }
+        else
+        {
+            random = true;
+            ui->lineEdit_str->setText(QString::number(str));
+            ui->lineEdit_dex->setText(QString::number(dex));
+            ui->lineEdit_int->setText(QString::number(intel));
+            ui->lineEdit_luck->setText(QString::number(luck));
+        }
+    }
+        if (random)
+        {
+        flag = rand() % 2;
+        if (flag == 0)
+            ui->radioButton_Sex_M->click();
+        else
+            ui->radioButton_Sex_W->click();
+        }
+
+        if (random)// вывод результата
+        {
+            int hp,mp,atk,def;
+            hp = 8*str+2*dex;
+            mp = 8*intel+dex+luck;
+            atk = 6*str+2*dex+2*luck;
+            def = 7*dex+3*luck;
+
+
+            ui->label_hp_value->setNum(hp);
+            ui->label_mp_value->setNum(mp);
+            ui->label_hp_value->setNum(atk);
+            ui->label_hp_value->setNum(def);
+        }
+        else
+        {
+            ui->label_hp_value->clear();
+            ui->label_mp_value->clear();
+            ui->label_atk_value->clear();
+            ui->label_def_value->clear();
+            ui->label_class_value->clear();
+        }
+    }
+
+
+}
+*/

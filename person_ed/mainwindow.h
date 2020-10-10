@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QMessageBox> // библиотека с окошками сообщений
+#include <ctime>
+#include <time.h>
 namespace Ui {
 class MainWindow;
 }
@@ -19,6 +21,8 @@ private slots:
     void on_pushButton_clear_clicked();
 
     void on_pushButton_create_clicked();
+
+    void on_pushButton_rand_clicked();
 
 private:
     Ui::MainWindow *ui;
